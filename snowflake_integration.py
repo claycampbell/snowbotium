@@ -3,7 +3,6 @@ import snowflake.connector
 
 
 # Snowflake connection parameters
-snowflake_connection = st.secrets["snowflake"]["connection"]
 snowflake_user = st.secrets["snowflake"]["user"]
 snowflake_password = st.secrets["snowflake"]["password"]
 snowflake_account = st.secrets["snowflake"]["account"]
