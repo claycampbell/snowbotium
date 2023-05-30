@@ -104,19 +104,39 @@ def show_home():
 
 def show_changelog():
     st.title("Changelog")
-    
+
     st.subheader("Version 1.0")
     st.markdown("- Initial release of Snowbotium.")
-    st.markdown("- Added PDF upload functionality, allowing users to upload PDF documents for analysis.")
-    st.markdown("- Implemented idea generation, benefit explanation, effort estimation, and project plan creation features.")
-    st.markdown("- Users can generate ideas for user stories, explain customer benefits, estimate effort and identify risks, and create a project plan based on the content of the uploaded document.")
-    st.markdown("- Integrated Snowflake database for storing file data and prompt-response information.")
-    st.markdown("- Users can view previously generated responses from Snowflake, providing a history of generated insights.")
-    
+
+    st.markdown("Highlights")
+    st.markdown("🔌 Initial release of Snowbotium.")
+
+    st.markdown("Notable Changes")
+    st.markdown("🐼 Added PDF upload functionality, allowing users to upload PDF documents for analysis.")
+    st.markdown("🍔 Implemented idea generation, benefit explanation, effort estimation, and project plan creation features.")
+    st.markdown("🪵 Users can generate ideas for user stories, explain customer benefits, estimate effort and identify risks, and create a project plan based on the content of the uploaded document.")
+
+    st.markdown("Other Changes")
+    st.markdown("🔏 Integrated Snowflake database for storing file data and prompt-response information.")
+    st.markdown("🤖 Users can view previously generated responses from Snowflake, providing a history of generated insights.")
+
     st.subheader("Version 1.1")
-    st.markdown("- Improved user interface with updated styling for a more intuitive and visually appealing experience.")
-    st.markdown("- Enhanced performance and stability, ensuring smooth execution of analysis and generation processes.")
-    st.markdown("- Fixed bugs and addressed user feedback to improve overall functionality and user experience.")
+    st.markdown("🎨 Improved user interface with updated styling for a more intuitive and visually appealing experience.")
+    st.markdown("⚡ Enhanced performance and stability, ensuring smooth execution of analysis and generation processes.")
+
+    st.markdown("Highlights")
+    st.markdown("🔌 Improved user interface with updated styling.")
+    st.markdown("🚀 Enhanced performance and stability.")
+
+    st.markdown("Notable Changes")
+    st.markdown("📱 Improved responsiveness of the application for different screen sizes.")
+    st.markdown("🛠 Optimized backend algorithms for faster generation of insights.")
+
+    st.markdown("Other Changes")
+    st.markdown("🔧 Fixed minor bugs and improved error handling.")
+    st.markdown("🌈 Added new visualizations for better data representation.")
+
+
 
 
 def main():
