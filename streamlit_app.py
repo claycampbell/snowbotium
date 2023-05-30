@@ -182,7 +182,8 @@ def main():
         if st.button("Estimate Effort and Identify Risks"):
             with st.spinner("Estimating effort and identifying risks..."):
                 responses = generate_responses(file_content, "What are the main tasks required to complete this project?")
-                st.success("Effort Estimated and Risks Identified!")
+            st.success("Effort Estimated and Risks Identified!")
+
             # Store responses in Snowflake
             for response in responses:
                 insert_prompt_response(str(uploaded_file.name), "What are the main tasks required to complete this project?", response)
@@ -207,5 +208,24 @@ def main():
             for index, response in enumerate(responses, start=1):
                 st.write(f"Response {index}: {response}")
 
+    # Initialize Snowflake connector
+    snowflake_connector = SnowflakeConnector()
+
+    # View Previously Generated Responses
+    if st.sidebar.button("View Previously Generated Responses"):
+        with st.spinner("Loading responses..."):
+            # Retrieve the stored responses from Snowflake
+            responses = snowflake_connector.fetch_responses()
+
+        # Display the responses
+        if responses:
+            st.subheader("Previously Generated Responses:")
+            for index, response in enumerate(responses, start=1):
+                st.write(f"Response {index}: {response}")
+        else:
+            st.info("No responses found.")
+
+
 if __name__ == "__main__":
     main()
+
