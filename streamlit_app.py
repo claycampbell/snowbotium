@@ -97,7 +97,9 @@ class SnowflakeConnector:
 def show_home():
     st.title(":snowflake: Snowbotium")
     st.markdown("Accelerate Your Data Migration Project")
-    # Add the content for the Home page
+    st.markdown("Welcome to Snowbotium! This app helps you analyze PDF documents and generate insights based on their content. To get started, follow these steps:")
+    st.markdown("- On the sidebar, upload a PDF file using the 'Upload PDF' section.")
+    st.markdown("- Once the PDF file is uploaded, you can choose from various options to generate ideas, explain customer benefits, estimate effort and risks, and create a project plan based on the document's content.")
 
 def show_changelog():
     st.title("Changelog")
@@ -122,6 +124,15 @@ def main():
 
     for option in menu_options:
         st.sidebar.markdown(f"- [{option}](#{option.replace(' ', '-').lower()})")
+
+    st.sidebar.markdown("---")
+
+    # Handle the selected option
+    if st.sidebar.button("Changelog"):
+        show_changelog()
+    else:
+        # Handle the Home option
+        show_home()
 
     # Upload a PDF file
     st.sidebar.title("Upload PDF")
@@ -171,49 +182,30 @@ def main():
         if st.button("Estimate Effort and Identify Risks"):
             with st.spinner("Estimating effort and identifying risks..."):
                 responses = generate_responses(file_content, "What are the main tasks required to complete this project?")
-            st.success("Effort Estimated and Risks Identified!")
+                st.success("Effort Estimated and Risks Identified!")
             # Store responses in Snowflake
             for response in responses:
                 insert_prompt_response(str(uploaded_file.name), "What are the main tasks required to complete this project?", response)
 
             # Display Responses
-            st.subheader("Effort and Risks:")
+            st.subheader("Effort Estimate and Risks:")
             for index, response in enumerate(responses, start=1):
                 st.write(f"Response {index}: {response}")
 
         # Create Project Plan
         if st.button("Create Project Plan"):
             with st.spinner("Creating project plan..."):
-                responses = generate_responses(file_content, "Create a project plan for this project.")
+                responses = generate_responses(file_content, "Create a project plan based on the document's content.")
             st.success("Project Plan Created!")
 
             # Store responses in Snowflake
             for response in responses:
-                insert_prompt_response(str(uploaded_file.name), "Create a project plan for this project.", response)
+                insert_prompt_response(str(uploaded_file.name), "Create a project plan based on the document's content.", response)
 
             # Display Responses
             st.subheader("Project Plan:")
             for index, response in enumerate(responses, start=1):
                 st.write(f"Response {index}: {response}")
-
-    # Initialize Snowflake connector
-    snowflake_connector = SnowflakeConnector()
-
-    # View Previously Generated Responses
-    if st.button("View Previously Generated Responses"):
-        with st.spinner("Loading responses..."):
-            # Retrieve the stored responses from Snowflake
-            responses = snowflake_connector.fetch_responses()
-
-        # Display the responses
-        if responses:
-            st.subheader("Previously Generated Responses:")
-            for index, response in enumerate(responses, start=1):
-                st.write(f"Response {index}: {response}")
-        else:
-            st.info("No responses found.")
-
-    st.sidebar.button("Changelog")
 
 if __name__ == "__main__":
     main()
