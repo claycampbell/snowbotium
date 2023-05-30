@@ -35,7 +35,7 @@ cursor.execute(f"""
     CREATE TABLE IF NOT EXISTS {snowbotium_table_files} (
         id STRING,
         filename STRING,
-        filedata VARIANT
+        filedata VARCHAR
     )
 """)
 
@@ -47,7 +47,6 @@ cursor.execute(f"""
     )
 """)
 
-
 # Function to insert file data into Snowflake
 def insert_file_data(file_id, filename, file_data):
     cursor.execute(f"""
@@ -55,7 +54,6 @@ def insert_file_data(file_id, filename, file_data):
         VALUES (%s, %s, %s)
     """, (file_id, filename, file_data))
     conn.commit()
-
 
 # Function to insert prompt-response data into Snowflake
 def insert_prompt_response(prompt_id, prompt, response):
