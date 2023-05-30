@@ -2,14 +2,14 @@ import streamlit as st
 import openai
 import os
 import PyPDF2
-from snowflake_integration import SnowflakeConnector
+from snowflake_integration import snowflake.connector
 
 # Get the OpenAI API key from environment variables
 api_key = os.getenv('OPENAI_API_KEY')
 openai.api_key = api_key
 
 # Initialize Snowflake connector
-snowflake_connector = SnowflakeConnector()
+snowflake.connector = SnowflakeConnector()
 
 # Define the conversation with the model
 def generate_responses(file_content, user_role):
