@@ -4,6 +4,7 @@ import os
 import PyPDF2
 import snowflake.connector
 
+
 # Get the OpenAI API key from environment variables
 api_key = os.getenv('OPENAI_API_KEY')
 openai.api_key = api_key
@@ -85,6 +86,16 @@ def generate_responses(file_content, user_role):
         response_text = choice.message.content
         responses.append(response_text)
     return responses
+
+
+# Snowflake connector class
+class SnowflakeConnector:
+    def fetch_responses(self):
+        # Retrieve the stored responses from Snowflake
+        cursor.execute(f"SELECT response FROM {snowbotium_table_responses}")
+        rows = cursor.fetchall()
+        responses = [row[0] for row in rows]
+        return responses
 
 
 # Snowbotium application code
@@ -169,7 +180,7 @@ def main():
             for index, response in enumerate(responses, start=1):
                 st.write(f"Response {index}: {response}")
 
-                # Initialize Snowflake connector
+    # Initialize Snowflake connector
     snowflake_connector = SnowflakeConnector()
 
     # View Previously Generated Responses
@@ -185,8 +196,6 @@ def main():
                 st.write(f"Response {index}: {response}")
         else:
             st.info("No responses found.")
-
-    # ... your existing code ...
 
 
 if __name__ == "__main__":
