@@ -225,10 +225,6 @@ def main():
         # Handle the Home option
         show_home()
 
-    # Show the changelog
-    if st.sidebar.button("Changelog"):
-        show_changelog()
-
 if __name__ == "__main__":
     main()
 
