@@ -127,13 +127,6 @@ def main():
 
     st.sidebar.markdown("---")
 
-    # Handle the selected option
-    if st.sidebar.button("Changelog"):
-        show_changelog()
-    else:
-        # Handle the Home option
-        show_home()
-
     # Upload a PDF file
     st.sidebar.title("Upload PDF")
     uploaded_file = st.sidebar.file_uploader("Choose a PDF file", type="pdf")
@@ -225,7 +218,16 @@ def main():
             else:
                 st.info("No responses found.")
 
+    # Handle the selected option
+    if st.sidebar.button("Changelog"):
+        show_changelog()
+    else:
+        # Handle the Home option
+        show_home()
 
+    # Show the changelog
+    if st.sidebar.button("Changelog"):
+        show_changelog()
 
 if __name__ == "__main__":
     main()
