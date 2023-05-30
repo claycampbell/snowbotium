@@ -1,18 +1,19 @@
 import streamlit as st
-import os
 import snowflake.connector
-snowflake_connection = os.getenv('SNOWFLAKE_CONNECTION')
+
 # Snowflake connection parameters
-snowflake_user = os.getenv('SNOWFLAKE_USER')
-snowflake_password = os.getenv('SNOWFLAKE_PASSWORD')
-snowflake_account = os.getenv('SNOWFLAKE_ACCOUNT')
-snowflake_database = os.getenv('SNOWFLAKE_DATABASE')
-snowflake_schema = os.getenv('SNOWFLAKE_SCHEMA')
-snowflake_table_files = os.getenv('SNOWFLAKE_TABLE_FILES')
-snowflake_table_responses = os.getenv('SNOWFLAKE_TABLE_RESPONSES')
+snowflake_connection = st.secrets["snowflake_connection"]
+snowflake_user = st.secrets["snowflake_user"]
+snowflake_password = st.secrets["snowflake_password"]
+snowflake_account = st.secrets["snowflake_account"]
+snowflake_database = st.secrets["snowflake_database"]
+snowflake_schema = st.secrets["snowflake_schema"]
+snowflake_table_files = st.secrets["snowflake_table_files"]
+snowflake_table_responses = st.secrets["snowflake_table_responses"]
 
 # Establish Snowflake connection
 conn = snowflake.connector.connect(
+    connection=snowflake_connection,
     user=snowflake_user,
     password=snowflake_password,
     account=snowflake_account,
