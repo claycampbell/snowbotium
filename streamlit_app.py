@@ -4,7 +4,6 @@ import os
 import PyPDF2
 import snowflake.connector
 
-
 # Get the OpenAI API key from environment variables
 api_key = os.getenv('OPENAI_API_KEY')
 openai.api_key = api_key
@@ -64,7 +63,6 @@ def insert_prompt_response(prompt_id, prompt, response):
     """, (prompt_id, prompt, response))
     conn.commit()
 
-
 # Define the conversation with the model
 def generate_responses(file_content, user_role):
     conversation = [
@@ -87,7 +85,6 @@ def generate_responses(file_content, user_role):
         responses.append(response_text)
     return responses
 
-
 # Snowflake connector class
 class SnowflakeConnector:
     def fetch_responses(self):
@@ -102,7 +99,6 @@ def show_home():
     st.markdown("Accelerate Your Data Migration Project")
     # Add the content for the Home page
 
-# Function to display the Changelog page
 def show_changelog():
     st.title("Changelog")
     st.subheader("Version 1.0")
@@ -115,9 +111,9 @@ def show_changelog():
     st.markdown("- Improved user interface with updated styling.")
     st.markdown("- Enhanced performance and stability.")
     st.markdown("- Fixed bugs and addressed user feedback.")
-# Snowbotium application code
+
 def main():
- # Set page title and favicon
+    # Set page title and favicon
     st.set_page_config(page_title="Snowbotium", page_icon=":snowflake:")
 
     # Display the menu of links
@@ -135,9 +131,6 @@ def main():
     else:
         # Handle the Home option
         show_home()
-    # Header
-    st.title(":snowflake: Snowbotium")
-    st.markdown("Accelerate Your Data Migration Project")
 
     # Upload a PDF file
     st.sidebar.title("Upload PDF")
