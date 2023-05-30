@@ -142,7 +142,7 @@ def main():
         insert_file_data(str(uploaded_file.name), uploaded_file.name, file_content)
 
         # Generate Ideas for User Stories
-        if st.button("Generate Ideas for User Stories"):
+        if st.button("Generate Ideas for User Stories", key="generate-ideas"):
             with st.spinner("Generating ideas..."):
                 responses = generate_responses(file_content, "Generate ideas for user stories.")
             st.success("Ideas Generated!")
@@ -157,7 +157,7 @@ def main():
                 st.write(f"Idea {index}: {response}")
 
         # Explain Customer Benefits
-        if st.button("Explain Customer Benefits"):
+        if st.button("Explain Customer Benefits", key="explain-benefits"):
             with st.spinner("Explaining Benefits..."):
                 responses = generate_responses(file_content, "What are the main benefits of this project for the customer?")
             st.success("Benefits Explained!")
@@ -172,7 +172,7 @@ def main():
                 st.write(f"Response {index}: {response}")
 
         # Estimate Effort and Identify Risks
-        if st.button("Estimate Effort and Identify Risks"):
+        if st.button("Estimate Effort and Identify Risks", key="estimate-effort"):
             with st.spinner("Estimating effort and identifying risks..."):
                 responses = generate_responses(file_content, "What are the main tasks required to complete this project?")
             st.success("Effort Estimated and Risks Identified!")
@@ -187,7 +187,7 @@ def main():
                 st.write(f"Response {index}: {response}")
 
         # Create Project Plan
-        if st.button("Create Project Plan"):
+        if st.button("Create Project Plan", key="create-plan"):
             with st.spinner("Creating project plan..."):
                 responses = generate_responses(file_content, "Create a project plan based on the document's content.")
             st.success("Project Plan Created!")
