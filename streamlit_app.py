@@ -118,7 +118,7 @@ def main():
 
     # Display the menu of links
     st.sidebar.title("Navigation")
-    menu_options = ["Home", "Changelog"]
+    menu_options = ["Home"]
 
     for option in menu_options:
         st.sidebar.markdown(f"- [{option}](#{option.replace(' ', '-').lower()})")
