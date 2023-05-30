@@ -97,11 +97,54 @@ class SnowflakeConnector:
         responses = [row[0] for row in rows]
         return responses
 
+def show_changelog():
+    st.title("Changelog")
+    st.subheader("Version 1.0")
+    st.markdown("- Initial release of Snowbotium.")
+    st.markdown("- Added PDF upload functionality.")
+    st.markdown("- Implemented idea generation, benefit explanation, effort estimation, and project plan creation features.")
+    st.markdown("- Added Changelog page.")
 
+    st.subheader("Version 1.1")
+    st.markdown("- Improved user interface with updated styling.")
+    st.markdown("- Enhanced performance and stability.")
+    st.markdown("- Fixed bugs and addressed user feedback.")
 # Snowbotium application code
 def main():
-    # Set page title and favicon
     st.set_page_config(page_title="Snowbotium", page_icon=":snowflake:")
+
+    # Display the menu of links
+    st.title(":snowflake: Snowbotium")
+    st.markdown("Accelerate Your Data Migration Project")
+
+    st.sidebar.title("Navigation")
+    menu_options = ["Home", "Upload PDF", "Generate Ideas", "Explain Benefits", "Estimate Effort", "Create Project Plan"]
+
+    for option in menu_options:
+        st.sidebar.markdown(f"- [{option}](#{option.replace(' ', '-').lower()})")
+
+    st.sidebar.markdown("---")
+    st.sidebar.markdown("- [Changelog](#changelog)")
+
+    st.sidebar.markdown("---")
+
+    # Handle the selected option
+    if st.sidebar.button("Changelog"):
+        show_changelog()
+    else:
+        # Handle the other options as before
+        st.markdown("---")
+        show_homepage()
+        st.markdown("---")
+        show_upload_pdf()
+        st.markdown("---")
+        show_generate_ideas()
+        st.markdown("---")
+        show_explain_benefits()
+        st.markdown("---")
+        show_estimate_effort()
+        st.markdown("---")
+        show_create_project_plan()
 
     # Header
     st.title(":snowflake: Snowbotium")
