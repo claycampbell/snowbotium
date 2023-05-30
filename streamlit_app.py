@@ -9,7 +9,7 @@ api_key = os.getenv('OPENAI_API_KEY')
 openai.api_key = api_key
 
 # Initialize Snowflake connector
-snowflake_connector = SnowflakeConnector()
+import snowflake.connector
 
 # Define the conversation with the model
 def generate_responses(file_content, user_role):
