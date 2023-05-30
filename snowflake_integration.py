@@ -1,7 +1,7 @@
 import streamlit as st
 import os
 import snowflake.connector
-
+snowflake_connection = os.getenv('SNOWFLAKE_CONNECTION')
 # Snowflake connection parameters
 snowflake_user = os.getenv('SNOWFLAKE_USER')
 snowflake_password = os.getenv('SNOWFLAKE_PASSWORD')
