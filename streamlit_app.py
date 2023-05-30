@@ -3,13 +3,67 @@ import openai
 import os
 import PyPDF2
 from snowflake_integration import SnowflakeConnector
+import snowflake.connector
 
 # Get the OpenAI API key from environment variables
 api_key = os.getenv('OPENAI_API_KEY')
 openai.api_key = api_key
 
 # Initialize Snowflake connector
-import snowflake.connector
+snowflake_user = st.secrets["snowflake"]["user"]
+snowflake_password = st.secrets["snowflake"]["password"]
+snowflake_account = st.secrets["snowflake"]["account"]
+snowflake_database = st.secrets["snowflake"]["database"]
+snowflake_schema = st.secrets["snowflake"]["schema"]
+snowflake_table_files = st.secrets["snowflake"]["table_files"]
+snowflake_table_responses = st.secrets["snowflake"]["table_responses"]
+
+# Establish Snowflake connection
+conn = snowflake.connector.connect(
+    user=snowflake_user,
+    password=snowflake_password,
+    account=snowflake_account,
+    warehouse='COMPUTE_WH',
+    database=snowflake_database,
+    schema=snowflake_schema
+)
+
+# Create Snowflake cursor
+cursor = conn.cursor()
+
+# Create Snowflake tables if they don't exist
+cursor.execute(f"""
+    CREATE TABLE IF NOT EXISTS {snowflake_table_files} (
+        id STRING,
+        filename STRING,
+        filedata VARIANT
+    )
+""")
+
+cursor.execute(f"""
+    CREATE TABLE IF NOT EXISTS {snowflake_table_responses} (
+        id STRING,
+        prompt STRING,
+        response STRING
+    )
+""")
+
+# Function to insert file content into Snowflake
+def insert_file_content(file_content):
+    cursor.execute(f"""
+        INSERT INTO {snowflake_table_files} (id, filename, filedata)
+        VALUES ('{st.session_state.id_counter}', 'Uploaded PDF', PARSE_JSON('{file_content}'))
+    """)
+    conn.commit()
+
+# Function to insert responses into Snowflake
+def insert_responses(responses):
+    for response in responses:
+        cursor.execute(f"""
+            INSERT INTO {snowflake_table_responses} (id, prompt, response)
+            VALUES ('{st.session_state.id_counter}', 'User Input', '{response}')
+        """)
+        conn.commit()
 
 # Define the conversation with the model
 def generate_responses(file_content, user_role):
@@ -54,7 +108,7 @@ def main():
             file_content += page.extract_text()
 
         # Store file content in Snowflake
-        snowflake_connector.insert_file_content(file_content)
+        insert_file_content(file_content)
 
         # Generate Ideas for User Stories
         if st.button("Generate Ideas for User Stories"):
@@ -63,7 +117,7 @@ def main():
             st.success("Ideas Generated!")
 
             # Store responses in Snowflake
-            snowflake_connector.insert_responses(responses)
+            insert_responses(responses)
 
             # Display Responses
             st.subheader("User Story Ideas:")
@@ -77,7 +131,7 @@ def main():
             st.success("Benefits Explained!")
 
             # Store responses in Snowflake
-            snowflake_connector.insert_responses(responses)
+            insert_responses(responses)
 
             # Display Responses
             st.subheader("Customer Benefits:")
@@ -90,7 +144,7 @@ def main():
                 responses = generate_responses(file_content, "What are the main tasks required to complete this project?")
                 st.success("Effort Estimated and Risks Identified!")
             # Store responses in Snowflake
-            snowflake_connector.insert_responses(responses)
+            insert_responses(responses)
 
             # Display Responses
             st.subheader("Effort and Risks:")
@@ -104,7 +158,7 @@ def main():
             st.success("Project Plan Created!")
 
             # Store responses in Snowflake
-            snowflake_connector.insert_responses(responses)
+            insert_responses(responses)
 
             # Display Responses
             st.subheader("Project Plan:")
@@ -113,6 +167,7 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
-      
+    if 'id_counter' not in st.session_state:
+        st.session_state.id_counter = 1
 
+    main()
