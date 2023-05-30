@@ -7,6 +7,8 @@ snowflake_password = st.secrets["snowflake"]["password"]
 snowflake_account = st.secrets["snowflake"]["account"]
 snowflake_database = st.secrets["snowflake"]["database"]
 snowflake_schema = st.secrets["snowflake"]["schema"]
+snowflake_table_files = st.secrets["snowflake"]["table_files"]
+snowflake_table_responses = st.secrets["snowflake"]["table_responses"]
 
 # Establish Snowflake connection
 conn = snowflake.connector.connect(
