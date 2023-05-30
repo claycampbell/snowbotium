@@ -1,26 +1,28 @@
 import streamlit as st
 import snowflake.connector
 
+
 # Snowflake connection parameters
-snowflake_connection = st.secrets["snowflake_connection"]
-snowflake_user = st.secrets["snowflake_user"]
-snowflake_password = st.secrets["snowflake_password"]
-snowflake_account = st.secrets["snowflake_account"]
-snowflake_database = st.secrets["snowflake_database"]
-snowflake_schema = st.secrets["snowflake_schema"]
-snowflake_table_files = st.secrets["snowflake_table_files"]
-snowflake_table_responses = st.secrets["snowflake_table_responses"]
+snowflake_connection = st.secrets["snowflake"]["connection"]
+snowflake_user = st.secrets["snowflake"]["user"]
+snowflake_password = st.secrets["snowflake"]["password"]
+snowflake_account = st.secrets["snowflake"]["account"]
+snowflake_database = st.secrets["snowflake"]["database"]
+snowflake_schema = st.secrets["snowflake"]["schema"]
+snowflake_table_files = st.secrets["snowflake"]["table_files"]
+snowflake_table_responses = st.secrets["snowflake"]["table_responses"]
 
 # Establish Snowflake connection
 conn = snowflake.connector.connect(
-    connection=snowflake_connection,
-    user=snowflake_user,
-    password=snowflake_password,
-    account=snowflake_account,
+    user=st.secrets["snowflake_user"],
+    password=st.secrets["snowflake_password"],
+    account=st.secrets["snowflake_account"],
     warehouse='COMPUTE_WH',
-    database=snowflake_database,
-    schema=snowflake_schema
+    database=st.secrets["snowflake_database"],
+    schema=st.secrets["snowflake_schema"]
 )
+
+
 
 # Create Snowflake cursor
 cursor = conn.cursor()
