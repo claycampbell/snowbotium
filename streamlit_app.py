@@ -100,19 +100,24 @@ def show_home():
     st.markdown("Welcome to Snowbotium! This app helps you analyze PDF documents and generate insights based on their content. To get started, follow these steps:")
     st.markdown("- On the sidebar, upload a PDF file using the 'Upload PDF' section.")
     st.markdown("- Once the PDF file is uploaded, you can choose from various options to generate ideas, explain customer benefits, estimate effort and risks, and create a project plan based on the document's content.")
+    st.markdown("- To keep up with the latest updates please view the Changelog page.")
 
 def show_changelog():
     st.title("Changelog")
+    
     st.subheader("Version 1.0")
     st.markdown("- Initial release of Snowbotium.")
-    st.markdown("- Added PDF upload functionality.")
+    st.markdown("- Added PDF upload functionality, allowing users to upload PDF documents for analysis.")
     st.markdown("- Implemented idea generation, benefit explanation, effort estimation, and project plan creation features.")
-    st.markdown("- Added Changelog page.")
-
+    st.markdown("- Users can generate ideas for user stories, explain customer benefits, estimate effort and identify risks, and create a project plan based on the content of the uploaded document.")
+    st.markdown("- Integrated Snowflake database for storing file data and prompt-response information.")
+    st.markdown("- Users can view previously generated responses from Snowflake, providing a history of generated insights.")
+    
     st.subheader("Version 1.1")
-    st.markdown("- Improved user interface with updated styling.")
-    st.markdown("- Enhanced performance and stability.")
-    st.markdown("- Fixed bugs and addressed user feedback.")
+    st.markdown("- Improved user interface with updated styling for a more intuitive and visually appealing experience.")
+    st.markdown("- Enhanced performance and stability, ensuring smooth execution of analysis and generation processes.")
+    st.markdown("- Fixed bugs and addressed user feedback to improve overall functionality and user experience.")
+
 
 def main():
     # Set page title and favicon
