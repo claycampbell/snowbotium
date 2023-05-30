@@ -14,8 +14,8 @@ snowflake_password = st.secrets["snowflake"]["password"]
 snowflake_account = st.secrets["snowflake"]["account"]
 snowflake_database = st.secrets["snowflake"]["database"]
 snowflake_schema = st.secrets["snowflake"]["schema"]
-snowflake_table_files = st.secrets["snowflake"]["table_files"]
-snowflake_table_responses = st.secrets["snowflake"]["table_responses"]
+snowflake_table_files = "snowbotium_files"
+snowflake_table_responses = "snowbotium_responses"
 
 # Initialize Snowflake connection
 conn = snowflake.connector.connect(
@@ -32,7 +32,7 @@ cursor = conn.cursor()
 
 # Create Snowflake tables if they don't exist
 cursor.execute(f"""
-    CREATE TABLE IF NOT EXISTS {snowflake_table_files} (
+    CREATE TABLE IF NOT EXISTS {snowbotium_files} (
         id STRING,
         filename STRING,
         filedata VARIANT
@@ -40,7 +40,7 @@ cursor.execute(f"""
 """)
 
 cursor.execute(f"""
-    CREATE TABLE IF NOT EXISTS {snowflake_table_responses} (
+    CREATE TABLE IF NOT EXISTS {snowbotium_responses} (
         id STRING,
         prompt STRING,
         response STRING
@@ -51,18 +51,18 @@ cursor.execute(f"""
 # Function to insert file data into Snowflake
 def insert_file_data(file_id, filename, file_data):
     cursor.execute(f"""
-        INSERT INTO {snowflake_table_files} (id, filename, filedata)
-        VALUES ('{file_id}', '{filename}', PARSE_JSON('{file_data}'))
-    """)
+        INSERT INTO {snowbotium_files} (id, filename, filedata)
+        VALUES (%s, %s, %s)
+    """, (file_id, filename, file_data))
     conn.commit()
 
 
 # Function to insert prompt-response data into Snowflake
 def insert_prompt_response(prompt_id, prompt, response):
     cursor.execute(f"""
-        INSERT INTO {snowflake_table_responses} (id, prompt, response)
-        VALUES ('{prompt_id}', '{prompt}', '{response}')
-    """)
+        INSERT INTO {snowbotium_responses} (id, prompt, response)
+        VALUES (%s, %s, %s)
+    """, (prompt_id, prompt, response))
     conn.commit()
 
 
@@ -110,9 +110,7 @@ def main():
             file_content += page.extract_text()
 
         # Store file content in Snowflake
-        file_id = str(st.session_state.id_counter)
-        filename = uploaded_file.name
-        insert_file_data(file_id, filename, file_content)
+        insert_file_data(uploaded_file.name, uploaded_file.name, file_content)
 
         # Generate Ideas for User Stories
         if st.button("Generate Ideas for User Stories"):
@@ -122,7 +120,7 @@ def main():
 
             # Store responses in Snowflake
             for response in responses:
-                insert_prompt_response(st.session_state.id_counter, "Generate ideas for user stories.", response)
+                insert_prompt_response(uploaded_file.name, "Generate ideas for user stories.", response)
 
             # Display Responses
             st.subheader("User Story Ideas:")
@@ -137,7 +135,7 @@ def main():
 
             # Store responses in Snowflake
             for response in responses:
-                insert_prompt_response(st.session_state.id_counter, "What are the main benefits of this project for the customer?", response)
+                insert_prompt_response(uploaded_file.name, "What are the main benefits of this project for the customer?", response)
 
             # Display Responses
             st.subheader("Customer Benefits:")
@@ -152,7 +150,7 @@ def main():
 
             # Store responses in Snowflake
             for response in responses:
-                insert_prompt_response(st.session_state.id_counter, "What are the main tasks required to complete this project?", response)
+                insert_prompt_response(uploaded_file.name, "What are the main tasks required to complete this project?", response)
 
             # Display Responses
             st.subheader("Effort and Risks:")
@@ -167,20 +165,13 @@ def main():
 
             # Store responses in Snowflake
             for response in responses:
-                insert_prompt_response(st.session_state.id_counter, "Create a project plan for this project.", response)
+                insert_prompt_response(uploaded_file.name, "Create a project plan for this project.", response)
 
             # Display Responses
             st.subheader("Project Plan:")
             for index, response in enumerate(responses, start=1):
                 st.write(f"Response {index}: {response}")
 
-        # Increment the ID counter
-        st.session_state.id_counter += 1
 
-
-# Run the Snowbotium application
 if __name__ == "__main__":
-    if 'id_counter' not in st.session_state:
-        st.session_state.id_counter = 1
-
     main()
