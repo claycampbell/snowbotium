@@ -1,8 +1,12 @@
 import streamlit as st
-import snowflake.connector
+import openai
 import os
 import PyPDF2
-import openai
+import snowflake.connector
+
+# Get the OpenAI API key from environment variables
+api_key = os.getenv('OPENAI_API_KEY')
+openai.api_key = api_key
 
 # Snowflake connection parameters
 snowflake_user = st.secrets["snowflake"]["user"]
@@ -87,35 +91,91 @@ def generate_responses(file_content, user_role):
 
 # Snowbotium application code
 def main():
-    st.title("Snowbotium")
+    # Set page title and favicon
+    st.set_page_config(page_title="Snowbotium", page_icon=":snowflake:")
 
-    # File upload
-    uploaded_file = st.file_uploader("Choose a file", type=["pdf"])
+    # Header
+    st.title(":snowflake: Snowbotium")
+    st.markdown("Accelerate Your Data Migration Project")
+
+    # Upload a PDF file
+    st.sidebar.title("Upload PDF")
+    uploaded_file = st.sidebar.file_uploader("Choose a PDF file", type="pdf")
 
     if uploaded_file is not None:
-        file_id = st.session_state.id_counter  # Generate a unique ID for the file
-        file_data = uploaded_file.getvalue().decode("utf-8")
+        # Read the uploaded PDF file
+        pdf_reader = PyPDF2.PdfReader(uploaded_file)
+        file_content = ""
+        for page in pdf_reader.pages:
+            file_content += page.extract_text()
 
-        # Insert file data into Snowflake
-        insert_file_data(file_id, uploaded_file.name, file_data)
+        # Store file content in Snowflake
+        file_id = str(st.session_state.id_counter)
+        filename = uploaded_file.name
+        insert_file_data(file_id, filename, file_content)
+
+        # Generate Ideas for User Stories
+        if st.button("Generate Ideas for User Stories"):
+            with st.spinner("Generating ideas..."):
+                responses = generate_responses(file_content, "Generate ideas for user stories.")
+            st.success("Ideas Generated!")
+
+            # Store responses in Snowflake
+            for response in responses:
+                insert_prompt_response(st.session_state.id_counter, "Generate ideas for user stories.", response)
+
+            # Display Responses
+            st.subheader("User Story Ideas:")
+            for index, response in enumerate(responses, start=1):
+                st.write(f"Idea {index}: {response}")
+
+        # Explain Customer Benefits
+        if st.button("Explain Customer Benefits"):
+            with st.spinner("Explaining Benefits..."):
+                responses = generate_responses(file_content, "What are the main benefits of this project for the customer?")
+            st.success("Benefits Explained!")
+
+            # Store responses in Snowflake
+            for response in responses:
+                insert_prompt_response(st.session_state.id_counter, "What are the main benefits of this project for the customer?", response)
+
+            # Display Responses
+            st.subheader("Customer Benefits:")
+            for index, response in enumerate(responses, start=1):
+                st.write(f"Response {index}: {response}")
+
+        # Estimate Effort and Identify Risks
+        if st.button("Estimate Effort and Identify Risks"):
+            with st.spinner("Estimating effort and identifying risks..."):
+                responses = generate_responses(file_content, "What are the main tasks required to complete this project?")
+            st.success("Effort Estimated and Risks Identified!")
+
+            # Store responses in Snowflake
+            for response in responses:
+                insert_prompt_response(st.session_state.id_counter, "What are the main tasks required to complete this project?", response)
+
+            # Display Responses
+            st.subheader("Effort and Risks:")
+            for index, response in enumerate(responses, start=1):
+                st.write(f"Response {index}: {response}")
+
+        # Create Project Plan
+        if st.button("Create Project Plan"):
+            with st.spinner("Creating project plan..."):
+                responses = generate_responses(file_content, "Create a project plan for this project.")
+            st.success("Project Plan Created!")
+
+            # Store responses in Snowflake
+            for response in responses:
+                insert_prompt_response(st.session_state.id_counter, "Create a project plan for this project.", response)
+
+            # Display Responses
+            st.subheader("Project Plan:")
+            for index, response in enumerate(responses, start=1):
+                st.write(f"Response {index}: {response}")
 
         # Increment the ID counter
         st.session_state.id_counter += 1
-
-        st.success("File uploaded and stored in Snowflake!")
-
-    # Prompt and response
-    prompt = st.text_input("Enter a prompt")
-    if st.button("Generate Response"):
-        response = generate_responses(prompt)
-
-        # Insert prompt-response data into Snowflake
-        insert_prompt_response(st.session_state.id_counter, prompt, response)
-
-        # Increment the ID counter
-        st.session_state.id_counter += 1
-
-        st.write(f"Response: {response}")
 
 
 # Run the Snowbotium application
