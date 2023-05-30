@@ -123,15 +123,6 @@ def main():
     for option in menu_options:
         st.sidebar.markdown(f"- [{option}](#{option.replace(' ', '-').lower()})")
 
-    st.sidebar.markdown("---")
-
-    # Handle the selected option
-    if st.sidebar.button("Changelog"):
-        show_changelog()
-    else:
-        # Handle the Home option
-        show_home()
-
     # Upload a PDF file
     st.sidebar.title("Upload PDF")
     uploaded_file = st.sidebar.file_uploader("Choose a PDF file", type="pdf")
@@ -180,7 +171,7 @@ def main():
         if st.button("Estimate Effort and Identify Risks"):
             with st.spinner("Estimating effort and identifying risks..."):
                 responses = generate_responses(file_content, "What are the main tasks required to complete this project?")
-                st.success("Effort Estimated and Risks Identified!")
+            st.success("Effort Estimated and Risks Identified!")
             # Store responses in Snowflake
             for response in responses:
                 insert_prompt_response(str(uploaded_file.name), "What are the main tasks required to complete this project?", response)
@@ -222,6 +213,7 @@ def main():
         else:
             st.info("No responses found.")
 
+    st.sidebar.button("Changelog")
 
 if __name__ == "__main__":
     main()
