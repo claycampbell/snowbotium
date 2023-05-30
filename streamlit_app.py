@@ -4,7 +4,6 @@ import os
 import PyPDF2
 import snowflake.connector
 
-
 # Get the OpenAI API key from environment variables
 api_key = os.getenv('OPENAI_API_KEY')
 openai.api_key = api_key
@@ -98,16 +97,55 @@ class SnowflakeConnector:
         return responses
 
 
+# Function to display the Changelog page
+def show_changelog():
+    # Add content to the Changelog page
+    st.title("Changelog")
+    st.markdown("View the latest updates and changes to Snowbotium here.")
+
+    # Display the changelog content
+    st.subheader("Version 1.0")
+    st.markdown("- Initial release of Snowbotium.")
+    st.markdown("- Added PDF upload functionality.")
+    st.markdown("- Implemented idea generation, benefit explanation, effort estimation, and project plan creation features.")
+    st.markdown("- Added Changelog page.")
+
+    st.subheader("Version 1.1")
+    st.markdown("- Improved user interface with updated styling.")
+    st.markdown("- Enhanced performance and stability.")
+    st.markdown("- Fixed bugs and addressed user feedback.")
+
 # Snowbotium application code
 def main():
     # Set page title and favicon
     st.set_page_config(page_title="Snowbotium", page_icon=":snowflake:")
 
-    # Header
+    # Add navigation to the left sidebar
+    menu_options = ["Home", "Upload PDF", "Generate Ideas", "Explain Benefits", "Estimate Effort", "Create Project Plan", "Changelog"]
+    selected_option = st.sidebar.selectbox("Navigation", menu_options)
+
+    if selected_option == "Home":
+        show_homepage()
+    elif selected_option == "Upload PDF":
+        show_upload_pdf()
+    elif selected_option == "Generate Ideas":
+        show_generate_ideas()
+    elif selected_option == "Explain Benefits":
+        show_explain_benefits()
+    elif selected_option == "Estimate Effort":
+        show_estimate_effort()
+    elif selected_option == "Create Project Plan":
+        show_create_project_plan()
+    elif selected_option == "Changelog":
+        show_changelog()
+
+# Function to display the homepage
+def show_homepage():
     st.title(":snowflake: Snowbotium")
     st.markdown("Accelerate Your Data Migration Project")
 
-    # Upload a PDF file
+# Function to display the Upload PDF page
+def show_upload_pdf():
     st.sidebar.title("Upload PDF")
     uploaded_file = st.sidebar.file_uploader("Choose a PDF file", type="pdf")
 
@@ -180,23 +218,63 @@ def main():
             for index, response in enumerate(responses, start=1):
                 st.write(f"Response {index}: {response}")
 
-    # Initialize Snowflake connector
-    snowflake_connector = SnowflakeConnector()
+# Function to display the Generate Ideas page
+def show_generate_ideas():
+    st.title("Generate Ideas for User Stories")
+    # Add your code for the Generate Ideas page here
 
-    # View Previously Generated Responses
-    if st.button("View Previously Generated Responses"):
-        with st.spinner("Loading responses..."):
-            # Retrieve the stored responses from Snowflake
-            responses = snowflake_connector.fetch_responses()
+# Function to display the Explain Benefits page
+def show_explain_benefits():
+    st.title("Explain Customer Benefits")
+    # Add your code for the Explain Benefits page here
 
-        # Display the responses
-        if responses:
-            st.subheader("Previously Generated Responses:")
-            for index, response in enumerate(responses, start=1):
-                st.write(f"Response {index}: {response}")
-        else:
-            st.info("No responses found.")
+# Function to display the Estimate Effort page
+def show_estimate_effort():
+    st.title("Estimate Effort and Identify Risks")
+    # Add your code for the Estimate Effort page here
 
+# Function to display the Create Project Plan page
+def show_create_project_plan():
+    st.title("Create Project Plan")
+    # Add your code for the Create Project Plan page here
+
+# Snowflake connector class
+class SnowflakeConnector:
+    def fetch_responses(self):
+        # Retrieve the stored responses from Snowflake
+        cursor.execute(f"SELECT response FROM {snowbotium_table_responses}")
+        rows = cursor.fetchall()
+        responses = [row[0] for row in rows]
+        return responses
+
+# Function to display the Changelog page
+def show_changelog():
+    st.title("Changelog")
+    # Add your code for the Changelog page here
+
+# Snowbotium application code
+def main():
+    # Set page title and favicon
+    st.set_page_config(page_title="Snowbotium", page_icon=":snowflake:")
+
+    # Add navigation to the left sidebar
+    menu_options = ["Home", "Upload PDF", "Generate Ideas", "Explain Benefits", "Estimate Effort", "Create Project Plan", "Changelog"]
+    selected_option = st.sidebar.selectbox("Navigation", menu_options)
+
+    if selected_option == "Home":
+        show_homepage()
+    elif selected_option == "Upload PDF":
+        show_upload_pdf()
+    elif selected_option == "Generate Ideas":
+        show_generate_ideas()
+    elif selected_option == "Explain Benefits":
+        show_explain_benefits()
+    elif selected_option == "Estimate Effort":
+        show_estimate_effort()
+    elif selected_option == "Create Project Plan":
+        show_create_project_plan()
+    elif selected_option == "Changelog":
+        show_changelog()
 
 if __name__ == "__main__":
     main()
