@@ -208,22 +208,23 @@ def main():
             for index, response in enumerate(responses, start=1):
                 st.write(f"Response {index}: {response}")
 
-    # Initialize Snowflake connector
-    snowflake_connector = SnowflakeConnector()
+        # Initialize Snowflake connector
+        snowflake_connector = SnowflakeConnector()
 
-    # View Previously Generated Responses
-    if st.sidebar.button("View Previously Generated Responses"):
-        with st.spinner("Loading responses..."):
-            # Retrieve the stored responses from Snowflake
-            responses = snowflake_connector.fetch_responses()
+        # View Previously Generated Responses
+        with st.beta_expander("View Previously Generated Responses"):
+            with st.spinner("Loading responses..."):
+                # Retrieve the stored responses from Snowflake
+                responses = snowflake_connector.fetch_responses()
 
-        # Display the responses
-        if responses:
-            st.subheader("Previously Generated Responses:")
-            for index, response in enumerate(responses, start=1):
-                st.write(f"Response {index}: {response}")
-        else:
-            st.info("No responses found.")
+            # Display the responses
+            if responses:
+                st.subheader("Previously Generated Responses:")
+                for index, response in enumerate(responses, start=1):
+                    st.write(f"Response {index}: {response}")
+            else:
+                st.info("No responses found.")
+
 
 
 if __name__ == "__main__":
