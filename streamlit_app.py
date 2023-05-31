@@ -8,7 +8,7 @@ from langchain.agents import Tool
 from langchain.tools import BaseTool, DuckDuckGoSearchRun
 from langchain.utilities import PythonREPL
 from langchain.utilities import WikipediaAPIWrapper
-from langchain.tools import DuckDuckGoSearchTool
+from langchain.tools.ddg_search.tool import DuckDuckGoSearchRun
 from FreeLLM import ChatGPTAPI
 
 # Get the OpenAI API key from environment variables
