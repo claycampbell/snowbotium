@@ -148,7 +148,7 @@ def show_changelog():
 def show_aiagent():
     
 # Instantiate a ChatGPT object with your token
- llm = HuggingChatAPI.HuggingChat() 
+    llm = HuggingChatAPI.HuggingChat() 
 
 # or use Bing CHAT
 # llm = BingChatAPI.BingChat(cookiepath="cookie_path")
@@ -161,52 +161,52 @@ def show_aiagent():
 
 
 # Define the tools
-wikipedia = WikipediaAPIWrapper()
-python_repl = PythonREPL()
-search = DuckDuckGoSearchRun()
+    wikipedia = WikipediaAPIWrapper()
+    python_repl = PythonREPL()
+    search = DuckDuckGoSearchRun()
 
-tools = [
-    Tool(
-        name = "python repl",
-        func=python_repl.run,
-        description="useful for when you need to use python to answer a question. You should input python code"
+    tools = [
+        Tool(
+            name = "python repl",
+            func=python_repl.run,
+            description="useful for when you need to use python to answer a question. You should input python code"
+        )
+    ]
+
+    wikipedia_tool = Tool(
+        name='wikipedia',
+        func= wikipedia.run,
+        description="Useful for when you need to look up a topic, country or person on wikipedia"
     )
-]
 
-wikipedia_tool = Tool(
-    name='wikipedia',
-    func= wikipedia.run,
-    description="Useful for when you need to look up a topic, country or person on wikipedia"
-)
+    duckduckgo_tool = Tool(
+        name='DuckDuckGo Search',
+        func= search.run,
+        description="Useful for when you need to do a search on the internet to find information that another tool can't find. be specific with your input."
+    )
 
-duckduckgo_tool = Tool(
-    name='DuckDuckGo Search',
-    func= search.run,
-    description="Useful for when you need to do a search on the internet to find information that another tool can't find. be specific with your input."
-)
-
-tools.append(duckduckgo_tool)
-tools.append(wikipedia_tool)
+    tools.append(duckduckgo_tool)
+    tools.append(wikipedia_tool)
 
 
 #Create the Agent
-iteration = (int(input("Enter the number of iterations: ")) if input("Do you want to set the number of iterations? (y/n): ") == "y" else 3)
+    iteration = (int(input("Enter the number of iterations: ")) if input("Do you want to set the number of iterations? (y/n): ") == "y" else 3)
 
-zero_shot_agent = initialize_agent(
-    agent="zero-shot-react-description", 
-    tools=tools, 
-    llm=llm,
-    verbose=True,
-    max_iterations=iteration,
-)
+    zero_shot_agent = initialize_agent(
+        agent="zero-shot-react-description", 
+        tools=tools, 
+        llm=llm,
+        verbose=True,
+        max_iterations=iteration,
+    )
 
 # Start your Custom Agent in loop
-print(">> STRAT CUSTOM AGENT")
-print("> Digit 'exit' for exit or 'your task or question' for start\n\n")
-prompt = input("(Enter your task or question) >> ")
-while prompt.toLowerCase() != "exit":
-    zero_shot_agent.run(prompt)
+    print(">> STRAT CUSTOM AGENT")
+    print("> Digit 'exit' for exit or 'your task or question' for start\n\n")
     prompt = input("(Enter your task or question) >> ")
+    while prompt.toLowerCase() != "exit":
+        zero_shot_agent.run(prompt)
+        prompt = input("(Enter your task or question) >> ")
     
 def main():
     # Set page title and favicon
