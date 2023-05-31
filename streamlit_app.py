@@ -146,7 +146,7 @@ def show_changelog():
 def show_aiagent():
  # Initialize the AI Agent and define the tools
    # Instantiate a ChatGPT object with your token
-llm = ChatGPTAPI.ChatGPT((token="api_key")
+llm =  HuggingChatAPI.HuggingChat((token="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")
 
 # or use Bing CHAT
 # llm = BingChatAPI.BingChat(cookiepath="cookie_path")
