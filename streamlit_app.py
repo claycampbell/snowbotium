@@ -312,8 +312,9 @@ def main():
             else:
                 st.info("No responses found.")
 
-   # Handle the selected option
-if option == "AI Agent":
+  
+# Handle the selected option
+if "AI Agent" in menu_options:
     show_aiagent()
 elif st.sidebar.button("Changelog"):
     show_changelog()
