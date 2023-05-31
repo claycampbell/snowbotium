@@ -14,7 +14,6 @@ decorator==5.1.1
 entrypoints==0.4
 faiss-cpu==1.7.4
 frozenlist==1.3.3
-FreeLLM
 gitdb==4.0.10
 GitPython==3.1.31
 greenlet==2.0.2
