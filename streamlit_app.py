@@ -1,4 +1,16 @@
 import streamlit as st
+  # Set page title and favicon
+    st.set_page_config(page_title="Snowbotium", page_icon=":snowflake:")
+
+    # Display the menu of links
+    st.sidebar.title("Navigation")
+    menu_options = ["Home", "AI Agent"]
+    
+    for option in menu_options:
+       st.sidebar.markdown(f"- [{option}](#{option.replace(' ', '-').lower()})")
+
+    st.sidebar.markdown("---")
+
 import openai
 import os
 import PyPDF2
@@ -103,18 +115,7 @@ class SnowflakeConnector:
         responses = [row[0] for row in rows]
         return responses
 def main():
-    # Set page title and favicon
-    st.set_page_config(page_title="Snowbotium", page_icon=":snowflake:")
-
-    # Display the menu of links
-    st.sidebar.title("Navigation")
-    menu_options = ["Home", "AI Agent"]
-    
-    for option in menu_options:
-       st.sidebar.markdown(f"- [{option}](#{option.replace(' ', '-').lower()})")
-
-    st.sidebar.markdown("---")
-
+  
     # Upload a PDF file
     st.sidebar.title("Upload PDF")
     uploaded_file = st.sidebar.file_uploader("Choose a PDF file", type="pdf")
