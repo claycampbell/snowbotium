@@ -9,7 +9,7 @@ from langchain.tools import BaseTool, DuckDuckGoSearchRun
 from langchain.utilities import PythonREPL
 from langchain.utilities import WikipediaAPIWrapper
 from langchain.tools.ddg_search.tool import DuckDuckGoSearchRun
-from FreeLLM import ChatGPTAPI
+from FreeLLM import HuggingChatAPI 
 # Hugging FACE
 os.environ["HUGGINGFACE_TOKEN"] = "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"
 
