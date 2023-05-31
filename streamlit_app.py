@@ -144,9 +144,9 @@ def show_changelog():
     st.markdown("🌈 Added new visualizations for better data representation.")
 
 def show_aiagent():
-from langchain.prompts.chat import (
-    SystemMessagePromptTemplate,
-    HumanMessagePromptTemplate,
+    from langchain.prompts.chat import (
+        SystemMessagePromptTemplate,
+        HumanMessagePromptTemplate,
 )
 from langchain.schema import (
     AIMessage,
