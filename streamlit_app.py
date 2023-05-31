@@ -214,11 +214,10 @@ def main():
 
     # Display the menu of links
     st.sidebar.title("Navigation")
-    menu_options = ["Home"]
-    menu_options = ["aiagent"]
-
+    menu_options = ["Home", "AI Agent"]
+    
     for option in menu_options:
-        st.sidebar.markdown(f"- [{option}](#{option.replace(' ', '-').lower()})")
+       st.sidebar.markdown(f"- [{option}](#{option.replace(' ', '-').lower()})")
 
     st.sidebar.markdown("---")
 
@@ -313,12 +312,15 @@ def main():
             else:
                 st.info("No responses found.")
 
-    # Handle the selected option
-    if st.sidebar.button("Changelog"):
-        show_changelog()
-    else:
-        # Handle the Home option
-        show_home()
+   # Handle the selected option
+if option == "AI Agent":
+    show_ai_agent()
+elif st.sidebar.button("Changelog"):
+    show_changelog()
+else:
+    # Handle the Home option
+    show_home()
+
 
 if __name__ == "__main__":
     main()
