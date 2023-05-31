@@ -102,6 +102,110 @@ class SnowflakeConnector:
         rows = cursor.fetchall()
         responses = [row[0] for row in rows]
         return responses
+def main():
+    # Set page title and favicon
+    st.set_page_config(page_title="Snowbotium", page_icon=":snowflake:")
+
+    # Display the menu of links
+    st.sidebar.title("Navigation")
+    menu_options = ["Home", "AI Agent"]
+    
+    for option in menu_options:
+       st.sidebar.markdown(f"- [{option}](#{option.replace(' ', '-').lower()})")
+
+    st.sidebar.markdown("---")
+
+    # Upload a PDF file
+    st.sidebar.title("Upload PDF")
+    uploaded_file = st.sidebar.file_uploader("Choose a PDF file", type="pdf")
+
+    if uploaded_file is not None:
+        # Read the uploaded PDF file
+        pdf_reader = PyPDF2.PdfReader(uploaded_file)
+        file_content = ""
+        for page in pdf_reader.pages:
+            file_content += page.extract_text()
+
+        # Store file content in Snowflake
+        insert_file_data(str(uploaded_file.name), uploaded_file.name, file_content)
+
+        # Generate Ideas for User Stories
+        if st.button("Generate Ideas for User Stories", key="generate-ideas"):
+            with st.spinner("Generating ideas..."):
+                responses = generate_responses(file_content, "Generate ideas for user stories.")
+            st.success("Ideas Generated!")
+
+            # Store responses in Snowflake
+            for response in responses:
+                insert_prompt_response(str(uploaded_file.name), "Generate ideas for user stories.", response)
+
+            # Display Responses
+            st.subheader("User Story Ideas:")
+            for index, response in enumerate(responses, start=1):
+                st.write(f"Idea {index}: {response}")
+
+        # Explain Customer Benefits
+        if st.button("Explain Customer Benefits", key="explain-benefits"):
+            with st.spinner("Explaining Benefits..."):
+                responses = generate_responses(file_content, "What are the main benefits of this project for the customer?")
+            st.success("Benefits Explained!")
+
+            # Store responses in Snowflake
+            for response in responses:
+                insert_prompt_response(str(uploaded_file.name), "What are the main benefits of this project for the customer?", response)
+
+            # Display Responses
+            st.subheader("Customer Benefits:")
+            for index, response in enumerate(responses, start=1):
+                st.write(f"Response {index}: {response}")
+
+        # Estimate Effort and Identify Risks
+        if st.button("Estimate Effort and Identify Risks", key="estimate-effort"):
+            with st.spinner("Estimating effort and identifying risks..."):
+                responses = generate_responses(file_content, "What are the main tasks required to complete this project?")
+            st.success("Effort Estimated and Risks Identified!")
+
+            # Store responses in Snowflake
+            for response in responses:
+                insert_prompt_response(str(uploaded_file.name), "What are the main tasks required to complete this project?", response)
+
+            # Display Responses
+            st.subheader("Effort Estimate and Risks:")
+            for index, response in enumerate(responses, start=1):
+                st.write(f"Response {index}: {response}")
+
+        # Create Project Plan
+        if st.button("Create Project Plan", key="create-plan"):
+            with st.spinner("Creating project plan..."):
+                responses = generate_responses(file_content, "Create a project plan based on the document's content.")
+            st.success("Project Plan Created!")
+
+            # Store responses in Snowflake
+            for response in responses:
+                insert_prompt_response(str(uploaded_file.name), "Create a project plan based on the document's content.", response)
+
+            # Display Responses
+            st.subheader("Project Plan:")
+            for index, response in enumerate(responses, start=1):
+                st.write(f"Response {index}: {response}")
+
+        # Initialize Snowflake connector
+        snowflake_connector = SnowflakeConnector()
+
+        # View Previously Generated Responses
+        with st.beta_expander("View Previously Generated Responses"):
+            with st.spinner("Loading responses..."):
+                # Retrieve the stored responses from Snowflake
+                responses = snowflake_connector.fetch_responses()
+
+            # Display the responses
+            if responses:
+                st.subheader("Previously Generated Responses:")
+                for index, response in enumerate(responses, start=1):
+                    st.write(f"Response {index}: {response}")
+            else:
+                st.info("No responses found.")
+    
 
 def show_home():
     st.title(":snowflake: Snowbotium")
@@ -208,109 +312,6 @@ def show_aiagent():
         zero_shot_agent.run(prompt)
         prompt = input("(Enter your task or question) >> ")
     
-def main():
-    # Set page title and favicon
-    st.set_page_config(page_title="Snowbotium", page_icon=":snowflake:")
-
-    # Display the menu of links
-    st.sidebar.title("Navigation")
-    menu_options = ["Home", "AI Agent"]
-    
-    for option in menu_options:
-       st.sidebar.markdown(f"- [{option}](#{option.replace(' ', '-').lower()})")
-
-    st.sidebar.markdown("---")
-
-    # Upload a PDF file
-    st.sidebar.title("Upload PDF")
-    uploaded_file = st.sidebar.file_uploader("Choose a PDF file", type="pdf")
-
-    if uploaded_file is not None:
-        # Read the uploaded PDF file
-        pdf_reader = PyPDF2.PdfReader(uploaded_file)
-        file_content = ""
-        for page in pdf_reader.pages:
-            file_content += page.extract_text()
-
-        # Store file content in Snowflake
-        insert_file_data(str(uploaded_file.name), uploaded_file.name, file_content)
-
-        # Generate Ideas for User Stories
-        if st.button("Generate Ideas for User Stories", key="generate-ideas"):
-            with st.spinner("Generating ideas..."):
-                responses = generate_responses(file_content, "Generate ideas for user stories.")
-            st.success("Ideas Generated!")
-
-            # Store responses in Snowflake
-            for response in responses:
-                insert_prompt_response(str(uploaded_file.name), "Generate ideas for user stories.", response)
-
-            # Display Responses
-            st.subheader("User Story Ideas:")
-            for index, response in enumerate(responses, start=1):
-                st.write(f"Idea {index}: {response}")
-
-        # Explain Customer Benefits
-        if st.button("Explain Customer Benefits", key="explain-benefits"):
-            with st.spinner("Explaining Benefits..."):
-                responses = generate_responses(file_content, "What are the main benefits of this project for the customer?")
-            st.success("Benefits Explained!")
-
-            # Store responses in Snowflake
-            for response in responses:
-                insert_prompt_response(str(uploaded_file.name), "What are the main benefits of this project for the customer?", response)
-
-            # Display Responses
-            st.subheader("Customer Benefits:")
-            for index, response in enumerate(responses, start=1):
-                st.write(f"Response {index}: {response}")
-
-        # Estimate Effort and Identify Risks
-        if st.button("Estimate Effort and Identify Risks", key="estimate-effort"):
-            with st.spinner("Estimating effort and identifying risks..."):
-                responses = generate_responses(file_content, "What are the main tasks required to complete this project?")
-            st.success("Effort Estimated and Risks Identified!")
-
-            # Store responses in Snowflake
-            for response in responses:
-                insert_prompt_response(str(uploaded_file.name), "What are the main tasks required to complete this project?", response)
-
-            # Display Responses
-            st.subheader("Effort Estimate and Risks:")
-            for index, response in enumerate(responses, start=1):
-                st.write(f"Response {index}: {response}")
-
-        # Create Project Plan
-        if st.button("Create Project Plan", key="create-plan"):
-            with st.spinner("Creating project plan..."):
-                responses = generate_responses(file_content, "Create a project plan based on the document's content.")
-            st.success("Project Plan Created!")
-
-            # Store responses in Snowflake
-            for response in responses:
-                insert_prompt_response(str(uploaded_file.name), "Create a project plan based on the document's content.", response)
-
-            # Display Responses
-            st.subheader("Project Plan:")
-            for index, response in enumerate(responses, start=1):
-                st.write(f"Response {index}: {response}")
-
-        # Initialize Snowflake connector
-        snowflake_connector = SnowflakeConnector()
-
-        # View Previously Generated Responses
-        with st.beta_expander("View Previously Generated Responses"):
-            with st.spinner("Loading responses..."):
-                # Retrieve the stored responses from Snowflake
-                responses = snowflake_connector.fetch_responses()
-
-            # Display the responses
-            if responses:
-                st.subheader("Previously Generated Responses:")
-                for index, response in enumerate(responses, start=1):
-                    st.write(f"Response {index}: {response}")
-            else:
-                st.info("No responses found.")
 
   
 # Handle the selected option
