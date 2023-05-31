@@ -315,7 +315,7 @@ def main():
   
 # Handle the selected option
 
-if "aiagent" in menu_options:
+if st.sidebar.button("AI Agent"):
     show_aiagent()
 elif st.sidebar.button("Changelog"):
     show_changelog()
