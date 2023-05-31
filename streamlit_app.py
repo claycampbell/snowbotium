@@ -163,7 +163,7 @@ def show_aiagent():
 # Define the tools
 wikipedia = WikipediaAPIWrapper()
 python_repl = PythonREPL()
-search = DuckDuckGoSearchTool()
+search = DuckDuckGoSearchRun()
 
 tools = [
     Tool(
