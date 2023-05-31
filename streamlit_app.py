@@ -10,6 +10,8 @@ from langchain.utilities import PythonREPL
 from langchain.utilities import WikipediaAPIWrapper
 from langchain.tools.ddg_search.tool import DuckDuckGoSearchRun
 from FreeLLM import ChatGPTAPI
+# Hugging FACE
+os.environ["HUGGINGFACE_TOKEN"] = "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"
 
 # Get the OpenAI API key from environment variables
 api_key = os.getenv('OPENAI_API_KEY')
