@@ -3,6 +3,13 @@ import openai
 import os
 import PyPDF2
 import snowflake.connector
+from langchain.agents import initialize_agent
+from langchain.agents import Tool
+from langchain.tools import BaseTool, DuckDuckGoSearchRun
+from langchain.utilities import PythonREPL
+from langchain.utilities import WikipediaAPIWrapper
+from langchain.tools import DuckDuckGoSearchTool
+from FreeLLM import ChatGPTAPI
 
 # Get the OpenAI API key from environment variables
 api_key = os.getenv('OPENAI_API_KEY')
@@ -136,6 +143,68 @@ def show_changelog():
     st.markdown("🔧 Fixed minor bugs and improved error handling.")
     st.markdown("🌈 Added new visualizations for better data representation.")
 
+def show_aiagent():
+ # Initialize the AI Agent and define the tools
+   # Instantiate a ChatGPT object with your token
+llm = ChatGPTAPI.ChatGPT((token="api_key")
+
+# or use Bing CHAT
+# llm = BingChatAPI.BingChat(cookiepath="cookie_path")
+
+# or use Google BArd CHAT
+# llm=BardChatAPI.BardChat(cookie="cookie") 
+
+# or use HuggingChatAPI if u dont have CHATGPT, BING or Google account
+# llm = HuggingChatAPI.HuggingChat() 
+
+
+# Define the tools
+wikipedia = WikipediaAPIWrapper()
+python_repl = PythonREPL()
+search = DuckDuckGoSearchTool()
+
+tools = [
+    Tool(
+        name = "python repl",
+        func=python_repl.run,
+        description="useful for when you need to use python to answer a question. You should input python code"
+    )
+]
+
+wikipedia_tool = Tool(
+    name='wikipedia',
+    func= wikipedia.run,
+    description="Useful for when you need to look up a topic, country or person on wikipedia"
+)
+
+duckduckgo_tool = Tool(
+    name='DuckDuckGo Search',
+    func= search.run,
+    description="Useful for when you need to do a search on the internet to find information that another tool can't find. be specific with your input."
+)
+
+tools.append(duckduckgo_tool)
+tools.append(wikipedia_tool)
+
+
+#Create the Agent
+iteration = (int(input("Enter the number of iterations: ")) if input("Do you want to set the number of iterations? (y/n): ") == "y" else 3)
+
+zero_shot_agent = initialize_agent(
+    agent="zero-shot-react-description", 
+    tools=tools, 
+    llm=llm,
+    verbose=True,
+    max_iterations=iteration,
+)
+
+# Start your Custom Agent in loop
+print(">> START CUSTOM AGENT")
+print("> Digit 'exit' for exit or 'your task or question' for start\n\n")
+prompt = input("(Enter your task or question) >> ")
+while prompt.toLowerCase() != "exit":
+    zero_shot_agent.run(prompt)
+    prompt = input("(Enter your task or question) >> ")
 
 
 
@@ -146,6 +215,7 @@ def main():
     # Display the menu of links
     st.sidebar.title("Navigation")
     menu_options = ["Home"]
+    menu_options = ["aiagent"]
 
     for option in menu_options:
         st.sidebar.markdown(f"- [{option}](#{option.replace(' ', '-').lower()})")
